@@ -1,5 +1,5 @@
-led_display.c:12:6:Diable_Led	8	static
-led_display.c:18:6:Scan7SEG	8	static
-led_display.c:46:6:display7SEG	16	static
-led_display.c:142:6:updateClockBuffer	16	static
-led_display.c:148:6:single_LED_off	8	static
+../Core/Src/led_display.c:12:6:Diable_Led	8	static
+../Core/Src/led_display.c:18:6:Scan7SEG	8	static
+../Core/Src/led_display.c:46:6:display7SEG	16	static
+../Core/Src/led_display.c:142:6:updateClockBuffer	16	static
+../Core/Src/led_display.c:148:6:single_LED_off	8	static

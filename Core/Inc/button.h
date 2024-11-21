@@ -8,7 +8,7 @@
 #ifndef INC_BUTTON_H_
 #define INC_BUTTON_H_
 
-#include "global.h"
+#include "main.h"
 
 #define NORMAL_STATE 1
 #define PRESS_STATE 0

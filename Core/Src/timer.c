@@ -27,6 +27,7 @@ void timer_run(){
 	}
 }
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){ // 10ms each time run
-	getKeyinput();
+	//getKeyinput();
 	timer_run();
+	SCH_Update();
 }

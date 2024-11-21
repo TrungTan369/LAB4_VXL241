@@ -98,6 +98,7 @@ void Error_Handler(void);
 #define EN2_GPIO_Port GPIOB
 #define EN3_Pin GPIO_PIN_6
 #define EN3_GPIO_Port GPIOB
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
@@ -107,5 +108,3 @@ void Error_Handler(void);
 #endif
 
 #endif /* __MAIN_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
