@@ -12,6 +12,7 @@
 #include "button.h"
 #include "led_display.h"
 #include "scheduler.h"
+#include "fsm_auto.h"
 // --- AUTO MODE--------
 #define auto_init 0
 #define auto_red_green 1

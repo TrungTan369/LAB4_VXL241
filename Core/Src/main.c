@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "scheduler.h"
+#include "global.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -97,9 +97,11 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   //setTimer(4, 1000); // debug
+  SCH_Init();
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, 1);
-  SCH_Add_Task(led_debug, 1000, 1000);
+  SCH_Add_Task(led_debug, 0, 1000);
   SCH_Add_Task(getKeyinput, 0, 10);
+  SCH_Add_Task(fsm_auto_run, 0, 0);
   while (1)
   {
 //	  fsm_auto_run();
