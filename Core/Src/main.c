@@ -52,6 +52,7 @@ static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 void led_debug();
+void led_test();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -96,23 +97,20 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  //setTimer(4, 1000); // debug
   SCH_Init();
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, 1);
   SCH_Add_Task(led_debug, 0, 1000);
   SCH_Add_Task(getKeyinput, 0, 10);
-  SCH_Add_Task(fsm_auto_run, 0, 0);
+  //SCH_Add_Task(led_test, 2000, 0);
+  SCH_Add_Task(fsm_auto_run, 0, 10);
+  SCH_Add_Task(Scan7SEG, 0, 250);
+  SCH_Add_Task(count_1_second, 0, 1000);
   while (1)
   {
-//	  fsm_auto_run();
-//	  fsm_manual();
-//	  fsm_slow_run();
-//	  fsm_setting();
-//	  if(timer_flag[4] == 1){
-//		  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
-//		  setTimer(4, 1000);
-//	  }
 	  SCH_Dispatch_Task();
+
+//	  if(isButtonPress(0) == 1){
+//		  HAL_GPIO_TogglePin(G0_GPIO_Port, G0_Pin);
+//	  }
 
     /* USER CODE END WHILE */
 
@@ -259,6 +257,12 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void led_debug(){
 	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+}
+void led_test(){
+	HAL_GPIO_TogglePin(Y0_GPIO_Port, Y0_Pin);
+}
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim){ // 10ms each time run
+	SCH_Update();
 }
 /* USER CODE END 4 */
 

@@ -10,7 +10,6 @@
 
 #include "global.h"
 #include <stdlib.h>
-extern uint8_t current_index_task;
 
 typedef struct sTask{
 	void (*pTask)(void);
@@ -26,12 +25,13 @@ typedef struct List{
 	sTask * tail;
 	uint8_t numTask;
 }List;
-
+extern List list;
 void SCH_Init(void);
 void SCH_Add_Task (void (*function) (), uint32_t, uint32_t);
 void SCH_Update(void);
 void SCH_Dispatch_Task(void);
 uint8_t SCH_Is_Task_Exist(void (*function)());
 uint8_t SCH_Delete_Task(uint8_t );
+uint8_t SCH_Delete_Task_By_Function(void (*function)() );
 
 #endif /* INC_SCHEDULER_H_ */

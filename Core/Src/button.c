@@ -11,8 +11,8 @@
 int buttonFlag[3] = {0,0,0};
 uint8_t count = 0;
 void getKeyinput(){
-	//-----PROCESS BUTTON 1------------
 	if (count > 0 ) count--;
+	//-----PROCESS BUTTON 1------------
 	if((count <= 0) && (HAL_GPIO_ReadPin(BUTTON_1_GPIO_Port, BUTTON_1_Pin) == 0)){
 		buttonFlag[0] = 1;
 		count = 20;
