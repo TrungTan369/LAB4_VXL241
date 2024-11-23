@@ -51,63 +51,93 @@ void SCH_Update(void){
 			temp->Delay --;
 		}
 		else{
-			temp->RunMe++;
+			//temp->RunMe++;
+			add_ListRun(temp->pTask);
 			temp->Delay = temp->Period;
-		}
-		temp = temp->next;
-	}
-}
-void SCH_Dispatch_Task(void){
-	sTask * temp = list.head;
-	while(temp != NULL){
-		if(temp->RunMe > 0){
-			temp->RunMe--;
-			temp->pTask();
 			if(temp->Period == 0){
-				sTask * delTask = temp;
+				sTask * del = temp;
 				temp = temp->next;
-				SCH_Delete_Task(delTask->pTask);
+				SCH_Delete_Task(del->pTask);
 				continue;
 			}
 		}
 		temp = temp->next;
 	}
-//	sTask * temp = list_run.head;
-//	while(temp != NULL){
-//		temp->pTask();
-//		sTask* del = temp;
-//		temp = temp->next;
-//		delete_ListRun(del->TaskID);
-//	}
 }
-//void add_to_ListRun(){
-//
-//}
-//void delete_ListRun(void (*function)()){
-//	if(list_run.numTask == 0)
-//		return ;
-//	sTask * temp = list_run.head;
-//	while(temp != 0){
-//		if(temp->TaskID == ID){
-//			if(temp->prev == NULL){ // delete head
-//				temp->next->prev = NULL;
-//				list.head = temp->next;
+void SCH_Dispatch_Task(void){
+//	sTask * temp = list.head;
+//	while(temp != NULL){
+//		if(temp->RunMe > 0){
+//			temp->RunMe--;
+//			temp->pTask();
+//			if(temp->Period == 0){
+//				sTask * delTask = temp;
+//				temp = temp->next;
+//				SCH_Delete_Task(delTask->pTask);
+//				continue;
 //			}
-//			else if (temp->next == NULL){ //delete tail
-//				temp->prev->next = NULL;
-//				list.tail = temp->prev;
-//			}
-//			else{
-//				temp->prev->next = temp->next;
-//				temp->next->prev = temp->prev;
-//			}
-//			list.numTask--;
-//			free(temp);
-//			return;
 //		}
 //		temp = temp->next;
 //	}
-//}
+	sTask * temp = list_run.head;
+	while(temp != NULL){
+		temp->pTask();
+		sTask* del = temp;
+		temp = temp->next;
+		delete_ListRun(del->pTask);
+	}
+}
+void add_ListRun(void (*function)()){
+	sTask * newTask = (sTask *) malloc ( sizeof(sTask));
+	newTask->pTask = function;
+	newTask->next = NULL;
+	newTask->prev = NULL;
+	if(list_run.numTask == 0){
+		list_run.head = newTask;
+		list_run.tail = newTask;
+
+	}
+	else{
+		newTask->prev = list_run.tail;
+		list_run.tail->next = newTask;
+		list_run.tail = newTask;
+	}
+	list_run.numTask++;
+}
+void delete_ListRun(void (*function)()){
+	if(list_run.numTask == 0)
+		return ;
+	if(list_run.numTask == 1){
+		sTask * del = list_run.head;
+		list_run.head = NULL;
+		list_run.tail = NULL;
+		free(del);
+		list_run.numTask--;
+		return;
+	}
+	sTask * temp = list_run.head;
+	while(temp != 0){
+		if(temp->pTask == function){
+			if(temp->prev == NULL){ // delete head
+				temp->next->prev = NULL;
+				list_run.head = temp->next;
+			}
+			else if (temp->next == NULL){ //delete tail
+				temp->prev->next = NULL;
+				list_run.tail = temp->prev;
+			}
+			else{
+				temp->prev->next = temp->next;
+				temp->next->prev = temp->prev;
+			}
+			list_run.numTask--;
+			free(temp);
+			return;
+		}
+		temp = temp->next;
+	}
+}
+
 uint8_t SCH_Delete_Task(void (*function)()){
 	if(list.numTask == 0)
 		return 0;
