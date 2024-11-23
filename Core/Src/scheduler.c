@@ -7,11 +7,15 @@
 #include "scheduler.h"
 
 List list;
-
+List list_run;
 void SCH_Init(void) {
 	list.head = NULL;
 	list.tail = NULL;
     list.numTask = 0;
+
+    list_run.head = NULL;
+    list_run.tail = NULL;
+    list_run.numTask = 0;
 }
 
 void SCH_Add_Task(void (*function)(), uint32_t Delay, uint32_t Period){\
@@ -25,7 +29,6 @@ void SCH_Add_Task(void (*function)(), uint32_t Delay, uint32_t Period){\
 	newTask->Delay = Delay/10; // scale for TIM2 10ms run
 	newTask->Period = Period/10;
 	newTask->RunMe = 0;
-	newTask->TaskID = list.numTask++;
 	newTask->next = NULL;
 	newTask->prev = NULL;
 
@@ -63,20 +66,54 @@ void SCH_Dispatch_Task(void){
 			if(temp->Period == 0){
 				sTask * delTask = temp;
 				temp = temp->next;
-				SCH_Delete_Task(delTask->TaskID);
+				SCH_Delete_Task(delTask->pTask);
 				continue;
 			}
 		}
 		temp = temp->next;
 	}
+//	sTask * temp = list_run.head;
+//	while(temp != NULL){
+//		temp->pTask();
+//		sTask* del = temp;
+//		temp = temp->next;
+//		delete_ListRun(del->TaskID);
+//	}
 }
-
-uint8_t SCH_Delete_Task(uint8_t ID){
+//void add_to_ListRun(){
+//
+//}
+//void delete_ListRun(void (*function)()){
+//	if(list_run.numTask == 0)
+//		return ;
+//	sTask * temp = list_run.head;
+//	while(temp != 0){
+//		if(temp->TaskID == ID){
+//			if(temp->prev == NULL){ // delete head
+//				temp->next->prev = NULL;
+//				list.head = temp->next;
+//			}
+//			else if (temp->next == NULL){ //delete tail
+//				temp->prev->next = NULL;
+//				list.tail = temp->prev;
+//			}
+//			else{
+//				temp->prev->next = temp->next;
+//				temp->next->prev = temp->prev;
+//			}
+//			list.numTask--;
+//			free(temp);
+//			return;
+//		}
+//		temp = temp->next;
+//	}
+//}
+uint8_t SCH_Delete_Task(void (*function)()){
 	if(list.numTask == 0)
 		return 0;
 	sTask * temp = list.head;
 	while(temp != 0){
-		if(temp->TaskID == ID){
+		if(temp->pTask == function){
 			if(temp->prev == NULL){ // delete head
 				temp->next->prev = NULL;
 				list.head = temp->next;
@@ -107,14 +144,4 @@ uint8_t SCH_Is_Task_Exist(void (*function)()){
 	}
 	return 0;
 }
-uint8_t SCH_Delete_Task_By_Function(void (*function)() ){
-	sTask * temp = list.head;
-	while(temp != NULL){
-		if(temp->pTask == function){
-			SCH_Delete_Task(temp->TaskID);
-			return 1;
-		}
-		temp = temp->next;
-	}
-	return 0;
-}
+

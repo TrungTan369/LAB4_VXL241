@@ -19,7 +19,7 @@ void fsm_manual(){
 			if(isButtonPress(0) == 1){
 				SCH_Add_Task(fsm_auto_run, 100, 10);
 				SCH_Add_Task(Scan7SEG, 100, 250);
-				SCH_Delete_Task_By_Function(fsm_manual);
+				SCH_Delete_Task(fsm_manual);
 				status = auto_red_green;
 				count0 = (time_red_green + time_red_yellow)/1000;
 				count1 = time_red_green / 1000;
@@ -38,7 +38,7 @@ void fsm_manual(){
 			if(isButtonPress(0) == 1){
 				SCH_Add_Task(fsm_auto_run, 100, 10);
 				SCH_Add_Task(Scan7SEG, 100, 250);
-				SCH_Delete_Task_By_Function(fsm_manual);
+				SCH_Delete_Task(fsm_manual);
 				status = auto_green_red;
 				count0 = time_red_green/1000;
 				count1 =   (time_red_green + time_red_yellow)/1000;
@@ -55,8 +55,8 @@ void fsm_manual(){
 		time_red_green = 0;
 		updateClockBuffer(0, 1);
 		status = set_green;
-		SCH_Delete_Task_By_Function(fsm_manual);
-		SCH_Delete_Task_By_Function(count_1_second);
+		SCH_Delete_Task(fsm_manual);
+		SCH_Delete_Task(count_1_second);
 		SCH_Add_Task(fsm_setting, 100, 10);
 		SCH_Add_Task(Scan7SEG, 10, 250);
 		single_LED_off();

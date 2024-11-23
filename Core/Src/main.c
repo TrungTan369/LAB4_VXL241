@@ -100,7 +100,6 @@ int main(void)
   SCH_Init();
   SCH_Add_Task(led_debug, 0, 1000);
   SCH_Add_Task(getKeyinput, 0, 10);
-  //SCH_Add_Task(led_test, 2000, 0);
   SCH_Add_Task(fsm_auto_run, 0, 10);
   SCH_Add_Task(Scan7SEG, 0, 250);
   SCH_Add_Task(count_1_second, 0, 1000);

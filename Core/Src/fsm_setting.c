@@ -50,7 +50,7 @@ void fsm_setting(){
 				else {
 					i = 0;
 					status = auto_init;
-					SCH_Delete_Task_By_Function(fsm_setting);
+					SCH_Delete_Task(fsm_setting);
 					SCH_Add_Task(fsm_auto_run, 100, 10);
 					SCH_Add_Task(count_1_second, 1000, 1000);
 					return;
