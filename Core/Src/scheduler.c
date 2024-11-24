@@ -28,7 +28,7 @@ void SCH_Add_Task(void (*function)(), uint32_t Delay, uint32_t Period){\
 	newTask->pTask = function;
 	newTask->Delay = Delay/10; // scale for TIM2 10ms run
 	newTask->Period = Period/10;
-	newTask->RunMe = 0;
+	//newTask->RunMe = 0;
 	newTask->next = NULL;
 	newTask->prev = NULL;
 
