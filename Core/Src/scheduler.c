@@ -65,6 +65,8 @@ void SCH_Update(void){
 	}
 }
 void SCH_Dispatch_Task(void){
+
+// ---- O (n) -------------
 //	sTask * temp = list.head;
 //	while(temp != NULL){
 //		if(temp->RunMe > 0){
@@ -79,6 +81,8 @@ void SCH_Dispatch_Task(void){
 //		}
 //		temp = temp->next;
 //	}
+
+// --------- O (1) --------------
 	sTask * temp = list_run.head;
 	while(temp != NULL){
 		temp->pTask();

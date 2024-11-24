@@ -98,7 +98,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   SCH_Init();
-  SCH_Add_Task(led_debug, 0, 1000);
+  SCH_Add_Task(led_debug, 3000, 1000);
   SCH_Add_Task(getKeyinput, 0, 10);
   SCH_Add_Task(fsm_auto_run, 0, 10);
   SCH_Add_Task(Scan7SEG, 0, 250);
