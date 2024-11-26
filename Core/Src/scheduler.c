@@ -19,8 +19,8 @@ void SCH_Init(void) {
 }
 
 void SCH_Add_Task(void (*function)(), uint32_t Delay, uint32_t Period){\
-	if(SCH_Is_Task_Exist(function) == 1)
-		return;
+//	if(SCH_Is_Task_Exist(function) == 1)
+//		return;
 	sTask * newTask = (sTask *) malloc (sizeof(sTask));
 	if (newTask == NULL)
 		return;

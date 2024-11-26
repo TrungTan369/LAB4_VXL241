@@ -100,16 +100,12 @@ int main(void)
   SCH_Init();
   SCH_Add_Task(led_debug, 3000, 1000);
   SCH_Add_Task(getKeyinput, 0, 10);
-  SCH_Add_Task(fsm_auto_run, 0, 10);
-  SCH_Add_Task(Scan7SEG, 0, 250);
-  SCH_Add_Task(count_1_second, 0, 1000);
+  SCH_Add_Task(fsm_auto_run, 10, 10);
+  SCH_Add_Task(Scan7SEG, 10, 250);
+  SCH_Add_Task(count_1_second, 10, 1000);
   while (1)
   {
 	  SCH_Dispatch_Task();
-
-//	  if(isButtonPress(0) == 1){
-//		  HAL_GPIO_TogglePin(G0_GPIO_Port, G0_Pin);
-//	  }
 
     /* USER CODE END WHILE */
 

@@ -1,7 +1,7 @@
-../Core/Src/fsm_auto.c:11:6:fsm_auto_run	10
-../Core/Src/fsm_auto.c:95:6:fsm_switch_state_auto_init	1
-../Core/Src/fsm_auto.c:98:6:fsm_switch_state_auto_red_green	1
-../Core/Src/fsm_auto.c:107:6:fsm_switch_state_auto_red_yellow	1
-../Core/Src/fsm_auto.c:114:6:fsm_switch_state_auto_green_red	1
-../Core/Src/fsm_auto.c:123:6:fsm_switch_state_auto_yellow_red	1
-../Core/Src/fsm_auto.c:130:6:count_1_second	3
+../Core/Src/fsm_auto.c:11:6:fsm_auto_run	9
+../Core/Src/fsm_auto.c:92:6:fsm_switch_state_auto_init	1
+../Core/Src/fsm_auto.c:95:6:fsm_switch_state_auto_red_green	1
+../Core/Src/fsm_auto.c:105:6:fsm_switch_state_auto_red_yellow	1
+../Core/Src/fsm_auto.c:112:6:fsm_switch_state_auto_green_red	1
+../Core/Src/fsm_auto.c:122:6:fsm_switch_state_auto_yellow_red	1
+../Core/Src/fsm_auto.c:129:6:count_1_second	3

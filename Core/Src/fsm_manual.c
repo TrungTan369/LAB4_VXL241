@@ -17,13 +17,14 @@ void fsm_manual(){
 				HAL_GPIO_WritePin(G1_GPIO_Port, G1_Pin, RESET);
 			}
 			if(isButtonPress(0) == 1){
-				SCH_Add_Task(fsm_auto_run, 100, 10);
-				SCH_Add_Task(Scan7SEG, 100, 250);
+				SCH_Add_Task(fsm_auto_run, 10, 10);
+				SCH_Add_Task(Scan7SEG, 10, 250);
 				SCH_Delete_Task(fsm_manual);
 				status = auto_red_green;
 				count0 = (time_red_green + time_red_yellow)/1000;
 				count1 = time_red_green / 1000;
 				updateClockBuffer(count0, count1);
+				SCH_Add_Task(fsm_switch_state_auto_red_yellow, time_red_green, 0);
 				return;
 			}
 			break;
@@ -36,13 +37,14 @@ void fsm_manual(){
 				HAL_GPIO_WritePin(G0_GPIO_Port, G0_Pin, RESET);
 			}
 			if(isButtonPress(0) == 1){
-				SCH_Add_Task(fsm_auto_run, 100, 10);
-				SCH_Add_Task(Scan7SEG, 100, 250);
+				SCH_Add_Task(fsm_auto_run, 10, 10);
+				SCH_Add_Task(Scan7SEG, 10, 250);
 				SCH_Delete_Task(fsm_manual);
 				status = auto_green_red;
 				count0 = time_red_green/1000;
 				count1 =   (time_red_green + time_red_yellow)/1000;
 				updateClockBuffer(count0, count1);
+				SCH_Add_Task(fsm_switch_state_auto_yellow_red, time_red_green, 0);
 				return;
 			}
 			break;

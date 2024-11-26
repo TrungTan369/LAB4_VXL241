@@ -7,7 +7,7 @@
 
 #include "fsm_auto.h"
 
-uint8_t temp_task;
+
 void fsm_auto_run(){
 	switch (status) {   // LINE 1
 		case auto_init:
@@ -21,12 +21,12 @@ void fsm_auto_run(){
 			HAL_GPIO_WritePin(R1_GPIO_Port, R1_Pin, RESET); // red 1 on
 			HAL_GPIO_WritePin(R0_GPIO_Port, R0_Pin, SET); // red0 on
 			HAL_GPIO_WritePin(G1_GPIO_Port, G1_Pin, SET); // green1 on
+			SCH_Add_Task(fsm_switch_state_auto_red_yellow, time_red_green, 0);
 			break;
 		case auto_red_green:
-			SCH_Add_Task(fsm_switch_state_auto_red_yellow, time_red_green, 0);
 			//-----SWITCHING MANNUAL MODE -----------
 			if(isButtonPress(1) == 1){
-				SCH_Delete_Task(fsm_switch_state_auto_red_yellow);
+				SCH_Delete_Task(fsm_switch_state_auto_red_yellow); // DELETE NEXT STATE OF AUTO MODE
 				SCH_Delete_Task(fsm_auto_run);
 				SCH_Delete_Task(Scan7SEG);
 				SCH_Add_Task(fsm_manual, 100, 10);
@@ -41,16 +41,14 @@ void fsm_auto_run(){
 			}
 			break;
 		case auto_red_yellow:
-			SCH_Add_Task(fsm_switch_state_auto_green_red, time_red_yellow, 0);
 			break;
 		case auto_green_red:
-			SCH_Add_Task(fsm_switch_state_auto_yellow_red, time_red_green, 0);
 			//-----SWITCHING MANNUAL MODE -----------
 			if(isButtonPress(1) == 1){
-				SCH_Delete_Task(fsm_switch_state_auto_yellow_red);
+				SCH_Delete_Task(fsm_switch_state_auto_yellow_red); // DELETE NEXT STATE OF AUTO MODE
 				SCH_Delete_Task(fsm_auto_run);
 				SCH_Delete_Task(Scan7SEG);
-				SCH_Add_Task(fsm_manual, 100, 10);
+				SCH_Add_Task(fsm_manual, 10, 10);
 				status = manual_green_red;
 				Diable_Led();
 				single_LED_off();
@@ -62,7 +60,6 @@ void fsm_auto_run(){
 			}
 			break;
 		case auto_yellow_red:
-			SCH_Add_Task(fsm_switch_state_auto_red_green, time_red_yellow, 0);
 			break;
 		default: // ----- MANUAL MODE & SETTING MODE & SLOW MODE---------
 			return;
@@ -86,7 +83,7 @@ void fsm_auto_run(){
 		SCH_Delete_Task(list.tail->pTask); // DELETE TASK SWITCH STATE
 		SCH_Delete_Task(fsm_auto_run);
 		SCH_Delete_Task(count_1_second);
-		SCH_Add_Task(fsm_setting, 100, 10);
+		SCH_Add_Task(fsm_setting, 10, 10);
 		single_LED_off();
 		HAL_GPIO_WritePin(G0_GPIO_Port, G0_Pin, 1);
 		HAL_GPIO_WritePin(G1_GPIO_Port, G1_Pin, 1);
@@ -103,13 +100,14 @@ void fsm_switch_state_auto_red_green(){
 	status = auto_red_green;
 	count0 = (time_red_green + time_red_yellow)/1000;
 	count1 = time_red_green/1000;
+	SCH_Add_Task(fsm_switch_state_auto_red_yellow, time_red_green, 0); // NEXT STATE
 }
 void fsm_switch_state_auto_red_yellow(){
 	HAL_GPIO_WritePin(G1_GPIO_Port, G1_Pin, RESET); // green1 off
 	HAL_GPIO_WritePin(Y1_GPIO_Port, Y1_Pin, SET); // yellow1 on
 	status = auto_red_yellow;
-	count0 = time_red_yellow/1000;;
-	count1 = time_red_yellow/1000;
+	count0 = count1 = time_red_yellow/1000;;
+	SCH_Add_Task(fsm_switch_state_auto_green_red, time_red_yellow, 0); // NEXT STATE
 }
 void fsm_switch_state_auto_green_red(){
 	HAL_GPIO_WritePin(R0_GPIO_Port, R0_Pin, RESET); // red 0 off
@@ -119,13 +117,14 @@ void fsm_switch_state_auto_green_red(){
 	status = auto_green_red;
 	count0 = (time_red_green)/1000;
 	count1 = (time_red_green + time_red_yellow)/1000;
+	SCH_Add_Task(fsm_switch_state_auto_yellow_red, time_red_green, 0);// NEXT STATE
 }
 void fsm_switch_state_auto_yellow_red(){
 	HAL_GPIO_WritePin(Y0_GPIO_Port, Y0_Pin, SET); // yellow 0 on
 	HAL_GPIO_WritePin(G0_GPIO_Port, G0_Pin, RESET); // green 0 off
 	status = auto_yellow_red;
-	count0 = time_red_yellow/1000;
-	count1 = time_red_yellow/1000;
+	count0 = count1 = time_red_yellow/1000;
+	SCH_Add_Task(fsm_switch_state_auto_red_green, time_red_yellow, 0);
 }
 void count_1_second(){
 	if(count0 > 0)

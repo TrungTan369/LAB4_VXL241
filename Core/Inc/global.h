@@ -35,7 +35,4 @@ extern int time_red_yellow;
 extern int count0, count1;
 extern int status;
 
-extern int counter_debug;
-
-
 #endif /* INC_GLOBAL_H_ */
