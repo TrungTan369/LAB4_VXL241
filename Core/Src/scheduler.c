@@ -7,28 +7,20 @@
 #include "scheduler.h"
 
 List list;
-List list_run;
+
 void SCH_Init(void) {
 	list.head = NULL;
 	list.tail = NULL;
     list.numTask = 0;
-
-    list_run.head = NULL;
-    list_run.tail = NULL;
-    list_run.numTask = 0;
 }
 
-void SCH_Add_Task(void (*function)(), uint32_t Delay, uint32_t Period){\
-//	if(SCH_Is_Task_Exist(function) == 1)
-//		return;
+void SCH_Add_Task(void (*function)(), uint32_t Delay, uint32_t Period){
 	sTask * newTask = (sTask *) malloc (sizeof(sTask));
 	if (newTask == NULL)
 		return;
-
 	newTask->pTask = function;
 	newTask->Delay = Delay/10; // scale for TIM2 10ms run
 	newTask->Period = Period/10;
-	//newTask->RunMe = 0;
 	newTask->next = NULL;
 	newTask->prev = NULL;
 
@@ -37,108 +29,53 @@ void SCH_Add_Task(void (*function)(), uint32_t Delay, uint32_t Period){\
 		list.tail = newTask;
 	}
 	else{
-		newTask->prev = list.tail;
-		list.tail->next = newTask;
-		list.tail = newTask;
+		sTask * cur = list.head;
+		//--------- FINDING LOCATE FOR NEWTASK-----------
+		while(cur != NULL && newTask->Delay >= cur->Delay){
+			newTask->Delay = newTask->Delay - cur->Delay;
+			cur = cur->next;
+		}
+		if(cur == list.head){ // Add To First List
+			newTask->next = list.head;
+			list.head->prev = newTask;
+			list.head->Delay = list.head->Delay - newTask->Delay;
+			list.head = newTask;
+		}
+		else if(cur == NULL){ // Add to Last List -- Add After Cur
+			newTask->prev = list.tail;
+			list.tail->next = newTask;
+			list.tail = newTask;
+		}
+		else{ // Add to Mid list -- Add before Cur
+			newTask->next = cur;
+			newTask->prev = cur->prev;
+			cur->prev->next = newTask;
+			cur->prev = newTask;
+			cur->Delay = cur->Delay - newTask->Delay;
+		}
 	}
 	list.numTask++;
 }
 
-void SCH_Update(void){
-	sTask * temp = list.head;
-	while(temp != NULL){
-		if(temp->Delay > 0){
-			temp->Delay --;
-		}
-		else{
-			//temp->RunMe++;
-			add_ListRun(temp->pTask);
-			temp->Delay = temp->Period;
-			if(temp->Period == 0){
-				sTask * del = temp;
-				temp = temp->next;
-				SCH_Delete_Task(del->pTask);
-				continue;
-			}
-		}
-		temp = temp->next;
-	}
-}
-void SCH_Dispatch_Task(void){
-
-// ---- O (n) -------------
-//	sTask * temp = list.head;
-//	while(temp != NULL){
-//		if(temp->RunMe > 0){
-//			temp->RunMe--;
-//			temp->pTask();
-//			if(temp->Period == 0){
-//				sTask * delTask = temp;
-//				temp = temp->next;
-//				SCH_Delete_Task(delTask->pTask);
-//				continue;
-//			}
-//		}
-//		temp = temp->next;
-//	}
-
-// --------- O (1) --------------
-	sTask * temp = list_run.head;
-	while(temp != NULL){
-		temp->pTask();
-		sTask* del = temp;
-		temp = temp->next;
-		delete_ListRun(del->pTask);
-	}
-}
-void add_ListRun(void (*function)()){
-	sTask * newTask = (sTask *) malloc ( sizeof(sTask));
-	newTask->pTask = function;
-	newTask->next = NULL;
-	newTask->prev = NULL;
-	if(list_run.numTask == 0){
-		list_run.head = newTask;
-		list_run.tail = newTask;
-
-	}
-	else{
-		newTask->prev = list_run.tail;
-		list_run.tail->next = newTask;
-		list_run.tail = newTask;
-	}
-	list_run.numTask++;
-}
-void delete_ListRun(void (*function)()){
-	if(list_run.numTask == 0)
-		return ;
-	if(list_run.numTask == 1){
-		sTask * del = list_run.head;
-		list_run.head = NULL;
-		list_run.tail = NULL;
-		free(del);
-		list_run.numTask--;
+void SCH_Update(void){ // TIM involked every 10ms
+	if (list.head == NULL) {
 		return;
 	}
-	sTask * temp = list_run.head;
-	while(temp != 0){
-		if(temp->pTask == function){
-			if(temp->prev == NULL){ // delete head
-				temp->next->prev = NULL;
-				list_run.head = temp->next;
-			}
-			else if (temp->next == NULL){ //delete tail
-				temp->prev->next = NULL;
-				list_run.tail = temp->prev;
-			}
-			else{
-				temp->prev->next = temp->next;
-				temp->next->prev = temp->prev;
-			}
-			list_run.numTask--;
-			free(temp);
-			return;
+	list.head->Delay--;
+}
+void SCH_Dispatch_Task(void){
+	if (list.head == NULL) {
+		return;
+	}
+	if(list.head->Delay <= 0){
+		list.head->pTask();
+		sTask * temp = list.head;
+		list.head = list.head->next;
+		if(temp->Period > 0){
+			SCH_Add_Task(temp->pTask, temp->Period * 10, temp->Period * 10);
 		}
-		temp = temp->next;
+		free(temp);
+		list.numTask--;
 	}
 }
 
@@ -148,17 +85,19 @@ uint8_t SCH_Delete_Task(void (*function)()){
 	sTask * temp = list.head;
 	while(temp != 0){
 		if(temp->pTask == function){
-			if(temp->prev == NULL){ // delete head
+			if(temp == list.head){ // Delete head
 				temp->next->prev = NULL;
 				list.head = temp->next;
+				list.head->Delay = list.head->Delay + temp->Delay;
 			}
-			else if (temp->next == NULL){ //delete tail
+			else if (temp == list.tail){ // Delete tail
 				temp->prev->next = NULL;
 				list.tail = temp->prev;
 			}
 			else{
 				temp->prev->next = temp->next;
 				temp->next->prev = temp->prev;
+				temp->next->Delay = temp->next->Delay + temp->Delay;
 			}
 			list.numTask--;
 			free(temp);

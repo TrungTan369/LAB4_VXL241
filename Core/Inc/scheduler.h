@@ -15,7 +15,6 @@ typedef struct sTask{
 	void (*pTask)(void);
 	uint32_t Delay;
 	uint32_t Period;
-	//uint8_t RunMe; // delete if use list_run;
 	struct sTask * next;
 	struct sTask * prev;
 }sTask;
@@ -31,7 +30,4 @@ void SCH_Update(void);
 void SCH_Dispatch_Task(void);
 uint8_t SCH_Is_Task_Exist(void (*function)());
 uint8_t SCH_Delete_Task(void (*function)() );
-void delete_ListRun();
-void add_ListRun();
-
 #endif /* INC_SCHEDULER_H_ */

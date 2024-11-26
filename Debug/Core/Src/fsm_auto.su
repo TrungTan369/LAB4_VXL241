@@ -1,7 +1,6 @@
 ../Core/Src/fsm_auto.c:11:6:fsm_auto_run	8	static
-../Core/Src/fsm_auto.c:92:6:fsm_switch_state_auto_init	4	static
-../Core/Src/fsm_auto.c:95:6:fsm_switch_state_auto_red_green	8	static
-../Core/Src/fsm_auto.c:105:6:fsm_switch_state_auto_red_yellow	8	static
-../Core/Src/fsm_auto.c:112:6:fsm_switch_state_auto_green_red	8	static
-../Core/Src/fsm_auto.c:122:6:fsm_switch_state_auto_yellow_red	8	static
-../Core/Src/fsm_auto.c:129:6:count_1_second	8	static
+../Core/Src/fsm_auto.c:94:6:fsm_switch_state_auto_red_green	8	static
+../Core/Src/fsm_auto.c:106:6:fsm_switch_state_auto_red_yellow	8	static
+../Core/Src/fsm_auto.c:115:6:fsm_switch_state_auto_green_red	8	static
+../Core/Src/fsm_auto.c:126:6:fsm_switch_state_auto_yellow_red	8	static
+../Core/Src/fsm_auto.c:134:6:count_1_second	8	static
