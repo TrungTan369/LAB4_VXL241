@@ -15,7 +15,6 @@ typedef struct sTask{
 	void (*pTask)(void);
 	uint32_t Delay;
 	uint32_t Period;
-	uint32_t next_run;
 	//uint8_t RunMe; // delete if use list_run;
 	struct sTask * next;
 	struct sTask * prev;

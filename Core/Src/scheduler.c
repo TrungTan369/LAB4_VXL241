@@ -8,9 +8,7 @@
 
 List list;
 List list_run;
-
-int current_time = 0;
-void SCH_Init(void){
+void SCH_Init(void) {
 	list.head = NULL;
 	list.tail = NULL;
     list.numTask = 0;
@@ -19,7 +17,8 @@ void SCH_Init(void){
     list_run.tail = NULL;
     list_run.numTask = 0;
 }
-void SCH_Add_Task(void (*function)(), uint32_t Delay, uint32_t Period){
+
+void SCH_Add_Task(void (*function)(), uint32_t Delay, uint32_t Period){\
 	if(SCH_Is_Task_Exist(function) == 1)
 		return;
 	sTask * newTask = (sTask *) malloc (sizeof(sTask));
@@ -29,7 +28,7 @@ void SCH_Add_Task(void (*function)(), uint32_t Delay, uint32_t Period){
 	newTask->pTask = function;
 	newTask->Delay = Delay/10; // scale for TIM2 10ms run
 	newTask->Period = Period/10;
-	newTask->next_run = current_time + Delay;
+	//newTask->RunMe = 0;
 	newTask->next = NULL;
 	newTask->prev = NULL;
 
@@ -45,14 +44,14 @@ void SCH_Add_Task(void (*function)(), uint32_t Delay, uint32_t Period){
 	list.numTask++;
 }
 
-void SCH_Update(void){ // TIM2 run with 100hz / 10ms
-	current_time += 10;
+void SCH_Update(void){
 	sTask * temp = list.head;
-	while(temp != NULL && temp->next_run < current_time){
+	while(temp != NULL){
 		if(temp->Delay > 0){
-			temp->Delay--;
+			temp->Delay --;
 		}
 		else{
+			//temp->RunMe++;
 			add_ListRun(temp->pTask);
 			temp->Delay = temp->Period;
 			if(temp->Period == 0){
@@ -66,6 +65,24 @@ void SCH_Update(void){ // TIM2 run with 100hz / 10ms
 	}
 }
 void SCH_Dispatch_Task(void){
+
+// ---- O (n) -------------
+//	sTask * temp = list.head;
+//	while(temp != NULL){
+//		if(temp->RunMe > 0){
+//			temp->RunMe--;
+//			temp->pTask();
+//			if(temp->Period == 0){
+//				sTask * delTask = temp;
+//				temp = temp->next;
+//				SCH_Delete_Task(delTask->pTask);
+//				continue;
+//			}
+//		}
+//		temp = temp->next;
+//	}
+
+// --------- O (1) --------------
 	sTask * temp = list_run.head;
 	while(temp != NULL){
 		temp->pTask();

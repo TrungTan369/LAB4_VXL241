@@ -7,6 +7,7 @@
 
 #include "fsm_auto.h"
 
+uint8_t temp_task;
 void fsm_auto_run(){
 	switch (status) {   // LINE 1
 		case auto_init:
