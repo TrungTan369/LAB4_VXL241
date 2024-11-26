@@ -82,8 +82,15 @@ void SCH_Dispatch_Task(void){
 uint8_t SCH_Delete_Task(void (*function)()){
 	if(list.numTask == 0)
 		return 0;
+	if(list.numTask == 1){
+		sTask * temp = list.head;
+		list.head = list.tail = NULL;
+		list.numTask = 0;
+		free(temp);
+		return 1;
+	}
 	sTask * temp = list.head;
-	while(temp != 0){
+	while(temp != NULL){
 		if(temp->pTask == function){
 			if(temp == list.head){ // Delete head
 				temp->next->prev = NULL;

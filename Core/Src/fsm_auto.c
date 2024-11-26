@@ -32,7 +32,7 @@ void fsm_auto_run(){
 				SCH_Delete_Task(Scan7SEG);
 				SCH_Add_Task(fsm_manual, 100, 10);
 				status = manual_red_green;
-				Diable_Led();
+				Diable_7SEG();
 				single_LED_off();
 				HAL_GPIO_WritePin(R0_GPIO_Port, R0_Pin, SET);
 				HAL_GPIO_WritePin(G1_GPIO_Port, G1_Pin, SET);
@@ -51,7 +51,7 @@ void fsm_auto_run(){
 				SCH_Delete_Task(Scan7SEG);
 				SCH_Add_Task(fsm_manual, 10, 10);
 				status = manual_green_red;
-				Diable_Led();
+				Diable_7SEG();
 				single_LED_off();
 				HAL_GPIO_WritePin(R1_GPIO_Port, R1_Pin, SET);
 				HAL_GPIO_WritePin(G0_GPIO_Port, G0_Pin, SET);
@@ -72,7 +72,7 @@ void fsm_auto_run(){
 		SCH_Delete_Task(Scan7SEG);
 		SCH_Add_Task(fsm_slow_run, 10, 500);
 		single_LED_off();// ------ALL LED OFF----------
-		Diable_Led(); //--- Disable led 7 segment ------
+		Diable_7SEG(); //--- Disable led 7 segment ------
 		return;
 	}
 	// -------SWITCHING SETTING MODE ------------

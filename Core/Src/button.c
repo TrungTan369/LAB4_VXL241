@@ -13,19 +13,19 @@ uint8_t count = 0;
 void getKeyinput(){
 	if (count > 0 ) count--;
 	//-----PROCESS BUTTON 1------------
-	if((count <= 0) && (HAL_GPIO_ReadPin(BUTTON_1_GPIO_Port, BUTTON_1_Pin) == 0)){
+	if((count == 0) && (HAL_GPIO_ReadPin(BUTTON_1_GPIO_Port, BUTTON_1_Pin) == 0)){
 		buttonFlag[0] = 1;
-		count = 20;
+		count = 10;
 	}
 	// ----PROCESS BUTTON 2-----------
-	if((count <= 0) && (HAL_GPIO_ReadPin(BUTTON_2_GPIO_Port, BUTTON_2_Pin) == 0)){
+	if((count == 0) && (HAL_GPIO_ReadPin(BUTTON_2_GPIO_Port, BUTTON_2_Pin) == 0)){
 		buttonFlag[1] = 1;
-		count = 20;
+		count = 10;
 	}
 	// ----- PROCESS BUTTON 3 -----------
-	if((count <= 0) && (HAL_GPIO_ReadPin(BUTTON_3_GPIO_Port, BUTTON_3_Pin) == 0)){
+	if((count == 0) && (HAL_GPIO_ReadPin(BUTTON_3_GPIO_Port, BUTTON_3_Pin) == 0)){
 		buttonFlag[2] = 1;
-		count = 20;
+		count = 10;
 	}
 
 }

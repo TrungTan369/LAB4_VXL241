@@ -3,4 +3,4 @@
 ../Core/Src/scheduler.c:60:6:SCH_Update	4	static
 ../Core/Src/scheduler.c:66:6:SCH_Dispatch_Task	16	static
 ../Core/Src/scheduler.c:82:9:SCH_Delete_Task	24	static
-../Core/Src/scheduler.c:110:9:SCH_Is_Task_Exist	24	static
+../Core/Src/scheduler.c:117:9:SCH_Is_Task_Exist	24	static
