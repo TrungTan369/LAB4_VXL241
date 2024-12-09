@@ -68,13 +68,13 @@ void SCH_Dispatch_Task(void){
 		return;
 	}
 	if(list.head->Delay <= 0){
-		list.head->pTask();
-		sTask * temp = list.head;
-		list.head = list.head->next;
-		if(temp->Period > 0){
-			SCH_Add_Task(temp->pTask, temp->Period * 10, temp->Period * 10);
+		sTask * run = list.head;
+		list.head = list.head->next; // Update list.head for SCH_UPDATE()
+		run->pTask();
+		if(run->Period > 0){
+			SCH_Add_Task(run->pTask, run->Period * 10, run->Period * 10);
 		}
-		free(temp);
+		free(run);
 		list.numTask--;
 	}
 }
